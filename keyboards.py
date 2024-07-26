@@ -48,3 +48,11 @@ async def admin_markup_function():
     builder.adjust(1)
     return builder.as_markup()
 
+
+async def replace_prices_markup_function():
+    builder = InlineKeyboardBuilder()
+    builder.button(text="CNY/RUB", callback_data='replace_china')
+    builder.button(text="USD/RUB", callback_data='replace_usa')
+    builder.adjust(1)
+    return builder.as_markup()
+

@@ -28,3 +28,7 @@ GROUP_BOT_MESSAGE
 USER_LOCK_MESSAGE = """
 Этот функционал доступен только модераторам бота
 """
+
+DOC_BLANK_MEAASGE = """
+DOC_BLANK_MEAASGE
+"""
