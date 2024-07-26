@@ -27,12 +27,12 @@ dp = Dispatcher(storage=storage)
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    await message.answer(f"Hello, {html.bold(message.from_user.full_name)}!", reply_markup=await keyboards.general_markup_function())
+    await message.answer(text=lexicon.INFO_BOT_MESSAGE, reply_markup=await keyboards.general_markup_function())
 
 @dp.message(Command("menu"))
 async def command_admin_handler(message: Message) -> None:
     if await logics.create_prices_function(message.chat.id):
-        await message.answer(text="Выберите команду", reply_markup=await keyboards.admin_markup_function())
+        await message.answer(text="Добро пожаловать, RomanGoody🫡", reply_markup=await keyboards.admin_markup_function())
     else:
         await message.answer(text=lexicon.USER_LOCK_MESSAGE)
 
@@ -55,23 +55,23 @@ async def group_bot_function(message: Message):
 @dp.message(F.text == "Узнать актуальный курс")
 async def actual_price_function(message: Message):
     prices = await logics.show_prices_function('files/prices.json')
-    msg = f"CNY/RUB -> {prices['china']}\n\nUSD/RUB -> {prices['usa']}"
+    msg = f"<b>Актуальные курсы валют:\n\nCNY/RUB 👉 {prices['china']}\nUSD/RUB 👉 {prices['usa']}</b>"
     await message.answer(text=msg)
 
 @dp.message(F.text.startswith("Запросить"))
 async def call_help_function(message: Message):
-    await bot.send_message(chat_id=config.DEV_ID, text=f"Запрос на обратную связь -> @{message.from_user.username}")
+    await bot.send_message(chat_id=config.OWNER_ID, text=f"@{message.from_user.username} 👈 запрос на обратную связь")
 
 @dp.callback_query(F.data.in_({'xslx', 'doc'}))
 async def show_blank_function(callback: CallbackQuery):
     if callback.data == 'doc':
         await callback.message.answer(text=lexicon.DOC_BLANK_MEAASGE)
     else:
-        await bot.send_document(chat_id=callback.message.chat.id, document=FSInputFile('files/Сорбент-02.07.2024.xlsx'))
+        await bot.send_document(chat_id=callback.message.chat.id, document=FSInputFile('files/Blank_zakaza_TWC.xlsx'))
 
 @dp.callback_query(F.data == 'all')
 async def show_all_function(callback: CallbackQuery):
-    await callback.message.answer(text="Возможности Бота", reply_markup=await keyboards.general_markup_function())
+    await callback.message.answer(text=lexicon.SHOW_ADMIN_MESSAGE, reply_markup=await keyboards.general_markup_function())
 
 @dp.callback_query(F.data == 'prices')
 async def replace_prices_function(callback: CallbackQuery):
@@ -83,21 +83,21 @@ async def choose_replace_prices_function(callback: CallbackQuery, state: FSMCont
         await state.set_state(states.Prices.china)
     else:
         await state.set_state(states.Prices.usa)
-    await callback.message.answer("Введите обновленный курс")
+    await callback.message.answer("Введите необходимый валютный курс: ")
 
 @dp.message(states.Prices.china)
 async def new_price_china_function(message: Message, state: FSMContext):
     await state.update_data(china=message.text)
     result_china = await state.get_data()
     await logics.add_prices_function('files/prices.json', china=result_china['china'])
-    await message.answer(text=f"Курс CNY/RUB обновлен")
+    await message.answer(text=f"Курс успешно назначен👍")
 
 @dp.message(states.Prices.usa)
 async def new_price_usa_function(message: Message, state: FSMContext):
     await state.update_data(usa=message.text)
     result_usa = await state.get_data()
     await logics.add_prices_function('files/prices.json', usa=result_usa['usa'])
-    await message.answer(text=f"Курс USD/RUB обновлен")
+    await message.answer(text=f"Курс успешно назначен👍")
 
 
 

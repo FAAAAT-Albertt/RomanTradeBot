@@ -28,7 +28,7 @@ async def blank_markup_function():
 
 async def group_markup_function():
     builder = InlineKeyboardBuilder()
-    builder.button(text="VK", url="https://vk.com")
+    builder.button(text="VK", url="https://vk.com/tradewithchinaru")
     builder.adjust(1)
     return builder.as_markup()
 
