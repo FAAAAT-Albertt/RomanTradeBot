@@ -19,7 +19,7 @@ import config
 import states
 
 
-TOKEN = "6368678074:AAEyPz9q_PLp7DGws1Ltk2AIHwDEEneEL1Q"
+# TOKEN = "6368678074:AAEyPz9q_PLp7DGws1Ltk2AIHwDEEneEL1Q"
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 
@@ -104,7 +104,7 @@ async def new_price_usa_function(message: Message, state: FSMContext):
 
 async def main() -> None:
     global bot
-    bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    bot = Bot(token=config.TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     await dp.start_polling(bot)
 
 
